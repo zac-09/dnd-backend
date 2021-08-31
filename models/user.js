@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const userSchema = new mongoose.Schema(
   {
-    
     email: {
       type: String,
       required: [true, "Please provide your email"],
@@ -16,8 +15,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "a user must have  a password"],
     },
-   
-    
+    first_name: {
+      type: String,
+      required: [true, "a user must have  a first name"], 
+    },
+    last_name: {
+      type: String,
+      required: [true, "a user must have  a last name"],
+    },
+
     createAt: {
       type: Date,
       default: Date.now(),
@@ -36,7 +42,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user",  "admin", ],
+      enum: ["user", "admin"],
       default: "user",
     },
   },
@@ -70,13 +76,13 @@ userSchema.methods.correctPassword = async function (
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
-userSchema.methods.createPasswordResetToken = function() {
-  const resetToken = crypto.randomBytes(32).toString('hex');
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
 
   this.passwordResetToken = crypto
-    .createHash('sha256')
+    .createHash("sha256")
     .update(resetToken)
-    .digest('hex');
+    .digest("hex");
 
   console.log({ resetToken }, this.passwordResetToken);
 
@@ -87,4 +93,3 @@ userSchema.methods.createPasswordResetToken = function() {
 const userModel = mongoose.model("User", userSchema);
 
 module.exports = userModel;
-
