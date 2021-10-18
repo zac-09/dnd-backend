@@ -3,7 +3,7 @@ const catchAsync = require("../utils/catchAsync");
 const Scenario = require("../models/scenario");
 
 exports.saveScenario = catchAsync(async (req, res, next) => {
-  const scenario = await Scenario.create(req.body);
+  const scenario = await Scenario.create({ ...req.body, userId: req.user._id });
   res.status(201).json({
     status: "success",
     scenario,
@@ -25,6 +25,14 @@ exports.getAllScenarios = catchAsync(async (req, res, next) => {
     scenarios,
   });
 });
+exports.getUserScenarios = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const scenarios = await Scenario.find({ userId: user._id });
+  res.status(200).json({
+    status: "success",
+    scenarios,
+  });
+});
 
 exports.deleteScenario = catchAsync(async (req, res, next) => {
   const scenario = await Scenario.findOne({ _id: req.params.id });
@@ -37,18 +45,23 @@ exports.deleteScenario = catchAsync(async (req, res, next) => {
 });
 
 exports.editScenario = catchAsync(async (req, res, next) => {
-console.log("reached here edit")
+  console.log("reached here edit");
 
   const scenario = await Scenario.findOne({ _id: req.params.id });
   if (!scenario) return next(new AppError("Scenario not found", 404));
-console.log("reached here",scenario)
-  const updatedScenario = await Scenario.findByIdAndUpdate(req.params.id, req.body, {
-    new: true, 
-    runValidators: true,
-  });
+  console.log("reached here", scenario);
+  const updatedScenario = await Scenario.findByIdAndUpdate(
+    req.params.id,
+    
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
   res.status(200).json({
-    status: "success", 
-    updatedScenario, 
+    status: "success",
+    updatedScenario,
   });
   res;
 });

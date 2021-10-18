@@ -11,6 +11,10 @@ const scenarioSchema = new mongoose.Schema(
       default: Date.now(),
     },
     data: [],
+    name: {
+      type: String,
+      required: [true, "you must give a scenario a name"],
+    },
   },
   {
     toJSON: { virtuals: true },
