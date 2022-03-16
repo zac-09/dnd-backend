@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const dotenv = require("dotenv").config();
 
-const DB = process.env.DB;
+const DB = process.env.LOCALDB;
 console.log("db url is", DB);
 
 //connect to DB
@@ -16,7 +16,7 @@ mongoose
   })
   .then(() => console.log("DB connection successful!"));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const server = app.listen(PORT, () => {
   console.log("app running on port", PORT);
 });

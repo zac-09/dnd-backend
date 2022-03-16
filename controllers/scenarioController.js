@@ -1,9 +1,18 @@
 const AppError = require("../utils/error");
 const catchAsync = require("../utils/catchAsync");
 const Scenario = require("../models/scenario");
+const CanvasScenario = require('../models/canvasScenario')
 
 exports.saveScenario = catchAsync(async (req, res, next) => {
   const scenario = await Scenario.create({ ...req.body, userId: req.user._id });
+  res.status(201).json({
+    status: "success",
+    scenario,
+  });
+});
+
+exports.saveCanvasScenario = catchAsync(async (req, res, next) => {
+  const scenario = await CanvasScenario.create({ data: req.body, userId: req.user._id, name: req.body.name });
   res.status(201).json({
     status: "success",
     scenario,
