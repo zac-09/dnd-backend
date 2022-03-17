@@ -34,6 +34,15 @@ exports.getAllScenarios = catchAsync(async (req, res, next) => {
     scenarios,
   });
 });
+
+exports.getUserCanvasScenarios = catchAsync(async (req, res, next) => {
+  const canvasScenarios = await CanvasScenario.find({});
+  res.status(200).json({
+    status: "success",
+    canvasScenarios,
+  });
+});
+
 exports.getUserScenarios = catchAsync(async (req, res, next) => {
   const user = req.user;
   const scenarios = await Scenario.find({ userId: user._id });

@@ -6,7 +6,8 @@ const {
   deleteScenario,
   editScenario,
   getUserScenarios,
-  saveCanvasScenario
+  saveCanvasScenario,
+  getUserCanvasScenarios,
 } = require("../controllers/scenarioController");
 const { protect } = require("../controllers/userController");
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 router.post("/saveScenario", protect, saveScenario);
 router.post("/saveCanvasScenario", protect, saveCanvasScenario);
 router.get("/userScenarios", protect, getUserScenarios);
+router.get("/userCanvasScenarios", protect, getUserCanvasScenarios);
 router.get("/:id", getScenario);
 router.delete("/:id", protect, deleteScenario);
 router.patch("/:id", protect, editScenario);
