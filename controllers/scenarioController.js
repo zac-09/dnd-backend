@@ -12,7 +12,7 @@ exports.saveScenario = catchAsync(async (req, res, next) => {
 });
 
 exports.saveCanvasScenario = catchAsync(async (req, res, next) => {
-  const scenario = await CanvasScenario.create({ data: req.body, userId: req.user._id, name: req.body.name });
+  const scenario = await CanvasScenario.create({ ...req.body, userId: req.user._id,});
   res.status(201).json({
     status: "success",
     scenario,
@@ -27,6 +27,17 @@ exports.getScenario = catchAsync(async (req, res, next) => {
     scenario,
   });
 });
+
+//get single canvas scenario
+exports.getCanvasScenario = catchAsync(async (req, res, next) => {
+  const scenario = await CanvasScenario.findOne({ _id: req.params.id });
+  if (!scenario) return next(new AppError("Scenario not found", 404));
+  res.status(200).json({
+    status: "success",
+    scenario,
+  });
+});
+
 exports.getAllScenarios = catchAsync(async (req, res, next) => {
   const scenarios = await Scenario.find({});
   res.status(200).json({
@@ -46,6 +57,16 @@ exports.getUserCanvasScenarios = catchAsync(async (req, res, next) => {
 exports.getUserScenarios = catchAsync(async (req, res, next) => {
   const user = req.user;
   const scenarios = await Scenario.find({ userId: user._id });
+  res.status(200).json({
+    status: "success",
+    scenarios,
+  });
+});
+
+//get canvas scenarios of user
+exports.getUserCanvasScenario = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const scenarios = await CanvasScenario.find({ userId: user._id });
   res.status(200).json({
     status: "success",
     scenarios,
@@ -72,6 +93,28 @@ exports.editScenario = catchAsync(async (req, res, next) => {
     req.params.id,
     
     req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  res.status(200).json({
+    status: "success",
+    updatedScenario,
+  });
+  res;
+});
+
+exports.editCanvasScenario = catchAsync(async (req, res, next) => {
+  console.log("reached here edit");
+
+  const canvasScenario = await CanvasScenario.findOne({ _id: req.params.id });
+  if (!canvasScenario) return next(new AppError("Scenario not found", 404));
+  console.log("reached here", canvasScenario);
+  const updatedScenario = await CanvasScenario.findByIdAndUpdate(
+    req.params.id,
+    
+    {data: req.body.data, name: req.body.name},
     {
       new: true,
       runValidators: true,
