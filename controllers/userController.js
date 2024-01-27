@@ -40,7 +40,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   //   "welcome",
   //   "welcome",
   //   "message",
-  //   "www.gpa-elevator.com"
+  //   "www.scenarioapp.com"
   // ).sendWelcome();
 
   createSendToken(newUser, 201, res);
